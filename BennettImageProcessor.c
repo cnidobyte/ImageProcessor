@@ -15,11 +15,13 @@ void testPrintBMP(struct BMP_Header header);
 void testPrintDIB(struct DIB_Header header);
 
 int main(int argc, char **argv) {
-    int bwflag = 0;
+    int bwFlag = 0;
     int shiftFlag = 0;
+    int sizeFlag = 0;
     int rShift = 0;
     int gShift = 0;
     int bShift = 0;
+    float factor = 1;
     int thing;
 
     FILE* infile;
@@ -55,7 +57,7 @@ int main(int argc, char **argv) {
             //Marks bwflag
             case 'w':
                 printf("w reaches here.\n");
-                bwflag = 1;
+                bwFlag = 1;
                 break;
             //Stores name of outfile for later use.
             case 'o' :
@@ -65,6 +67,8 @@ int main(int argc, char **argv) {
             //Stores resize factor.
             case 's' :
                 printf("s reaches here");
+                factor = atoi(optarg);
+                sizeFlag = 1;
                 break;
             default :
                 break;
@@ -89,11 +93,22 @@ int main(int argc, char **argv) {
     }
     readPixelsBMP(infile, pixel, dibHeader.image_width, dibHeader.image_height);
 
-    //TODO: Create Image
+    //Create Image
+    Image* img = image_create(pixel, dibHeader.image_width, dibHeader.image_height);
 
-    //TODO: Use Image filters, grayscale conversion first, then colorshifts, then resize.
+    //Apply image filters, grayscale conversion first, then colorshifts, then resize.
+    if(bwFlag == 1) {
+        image_apply_bw(img);
+    }
+    if(shiftFlag == 1) {
+        image_apply_colorshift(img, rShift, gShift, bShift);
+    }
+    if(sizeFlag == 1) {
+        image_apply_resize(img, factor);
+    }
 
     printf("Hello, World!\n");
+    image_destroy(&img);
     fclose(infile);
     return 0;
 }
