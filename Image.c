@@ -34,7 +34,14 @@ int image_get_height(Image* img) {
 }
 
 void image_apply_bw(Image* img) {
-
+    int row, col;
+    for(row = image_get_height(img) - 1; row >= 0; row--) {
+        for(col = 0; col < image_get_width(img); col++) {
+           img->pArr[row][col].b *= 0.114;
+           img->pArr[row][col].g *= 0.587;
+           img->pArr[row][col].r *= 0.299;
+        }
+    }
 }
 
 void image_apply_colorshift(Image* img, int rShift, int gShift, int bShift) {
