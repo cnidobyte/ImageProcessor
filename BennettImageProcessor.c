@@ -1,3 +1,10 @@
+/**
+ * Description:
+ * Time to Complete:
+ *
+ * @author Shota Bennett,
+ */
+
 #include <stdio.h>
 #include <unistd.h>
 #include "Image.h"
@@ -19,6 +26,8 @@ int main(int argc, char **argv) {
     FILE* outfile;
     struct BMP_Header bmpHeader;
     struct DIB_Header dibHeader;
+    struct Pixel** pixel;
+
 
     if(argc < 2) {
         printf("Please include an image to be processed. Usage: ImageProcessor <file.bmp> <args>");
@@ -31,21 +40,21 @@ int main(int argc, char **argv) {
             case 'r':
                 rShift = atoi(optarg);
                 shiftFlag = 1;
-                printf("r reaches here");
+                printf("r reaches here, %d\n", rShift);
                 break;
             case 'g':
                 gShift = atoi(optarg);
                 shiftFlag = 1;
-                printf("g reaches here");
+                printf("g reaches here, %d\n", gShift);
                 break;
             case 'b':
                 bShift = atoi(optarg);
                 shiftFlag = 1;
-                printf("b reaches here");
+                printf("b reaches here, %d\n", bShift);
                 break;
             //Marks bwflag
             case 'w':
-                printf("w reaches here.");
+                printf("w reaches here.\n");
                 bwflag = 1;
                 break;
             //Stores name of outfile for later use.
@@ -65,13 +74,24 @@ int main(int argc, char **argv) {
         //TODO: Play around with string so that file.bmp becomes file_copy.bmp
     }
 
-    //TODO: Read file. Read BMP Header, DIB Header, Pixel array.
+    // Read BMP and DIB headers.
     readBMPHeader(infile, &bmpHeader);
-//    testPrintBMP(bmpHeader);
-
     readDIBHeader(infile, &dibHeader);
-//    testPrintDIB(dibHeader);
 
+    //testPrintBMP(bmpHeader);
+    //testPrintDIB(dibHeader);
+
+    //Make Pixel Array
+    pixel = (struct Pixel **) malloc(sizeof(struct Pixel*) * dibHeader.image_width);
+    int i;
+    for(i = 0; i < dibHeader.image_width; i++) {
+        pixel[i] = malloc(sizeof(struct Pixel) * dibHeader.image_height);
+    }
+    readPixelsBMP(infile, pixel, dibHeader.image_width, dibHeader.image_height);
+
+    //TODO: Create Image
+
+    //TODO: Use Image filters, grayscale conversion first, then colorshifts, then resize.
 
     printf("Hello, World!\n");
     fclose(infile);

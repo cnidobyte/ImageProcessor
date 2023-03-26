@@ -25,6 +25,7 @@ struct DIB_Header{
     short planes;
     short bits_per_pixel;
     int compression;
+    int image_size;
     int x_ppm;
     int y_ppm;
     int colors_in_table;

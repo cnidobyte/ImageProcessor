@@ -32,6 +32,7 @@ void readDIBHeader(FILE* file, struct DIB_Header* header) {
     fread(&header->planes, sizeof(short), 1, file);
     fread(&header->bits_per_pixel, sizeof(short), 1, file);
     fread(&header->compression, sizeof(int), 1, file);
+    fread(&header->image_size, sizeof(int), 1, file);
     fread(&header->x_ppm, sizeof(int), 1, file);
     fread(&header->y_ppm, sizeof(int), 1, file);
     fread(&header->colors_in_table, sizeof(int), 1, file);
@@ -51,7 +52,19 @@ void makeBMPHeader(struct BMP_Header* header, int width, int height) {
 }
 
 void readPixelsBMP(FILE* file, struct Pixel** pArr, int width, int height) {
-
+    int row, col;
+    int paddingRequired = 4 - ((width * 3) % 4);
+    for(row = height - 1; row >= 0; row--) {
+        for(col = 0; col < width; col++) {
+            fread(&pArr[col][row].b, sizeof(char), 1, file);
+            fread(&pArr[col][row].g, sizeof(char), 1, file);
+            fread(&pArr[col][row].r, sizeof(char), 1, file);
+            printf("r: %d, g: %d, b: %d\n", pArr[col][row].r, pArr[col][row].g, pArr[col][row].b);
+        }
+        if(paddingRequired != 0) {
+            fseek(file, sizeof(unsigned char) * paddingRequired, SEEK_CUR);
+        }
+    }
 }
 
 void writePixelsBMP(FILE* file, struct Pixel** pArr, int width, int height) {

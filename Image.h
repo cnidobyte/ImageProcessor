@@ -26,7 +26,6 @@ struct Image {
 };
 
 struct Pixel{
-	//TODO: Finish struct
     u_int8_t b;
     u_int8_t g;
     u_int8_t r;
