@@ -3,7 +3,7 @@
 *
 * Completion time: ?
 *
-* @author (your name), Ruben Acuna
+* @author Shota Bennett, Ruben Acuna
 * @version 9/9/2021
 */
 
@@ -27,6 +27,9 @@ struct Image {
 
 struct Pixel{
 	//TODO: Finish struct
+    u_int8_t b;
+    u_int8_t g;
+    u_int8_t r;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

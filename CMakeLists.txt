@@ -4,4 +4,4 @@ project(ImageProcessor C)
 set(CMAKE_C_STANDARD 99)
 
 set(Headers Image.h BMPHandler.h)
-add_executable(ImageProcessor ${PROJECT_SOURCE_DIR}/ main.c Image.c BMPHandler.c)
+add_executable(ImageProcessor ${PROJECT_SOURCE_DIR}/ BennettImageProcessor.c Image.c BMPHandler.c)
