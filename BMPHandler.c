@@ -22,7 +22,11 @@ void readBMPHeader(FILE* file, struct BMP_Header* header) {
 }
 
 void writeBMPHeader(FILE* file, struct BMP_Header* header) {
-
+    fwrite(&header->signature, sizeof(char) * 2, 1, file);
+    fwrite(&header->size, sizeof(int), 1, file);
+    fwrite(&header->reserved1, sizeof(short), 1, file);
+    fwrite(&header->reserved2, sizeof(short), 1, file);
+    fwrite(&header->offset_pixel_array, sizeof(int), 1, file);
 }
 
 void readDIBHeader(FILE* file, struct DIB_Header* header) {
@@ -40,7 +44,17 @@ void readDIBHeader(FILE* file, struct DIB_Header* header) {
 }
 
 void writeDIBHeader(FILE* file, struct DIB_Header* header) {
-
+    fwrite(&header->DIB_Header_Size, sizeof(int), 1, file);
+    fwrite(&header->image_width, sizeof(int), 1, file);
+    fwrite(&header->image_height, sizeof(int), 1, file);
+    fwrite(&header->planes, sizeof(short), 1, file);
+    fwrite(&header->bits_per_pixel, sizeof(short), 1, file);
+    fwrite(&header->compression, sizeof(int), 1, file);
+    fwrite(&header->image_size, sizeof(int), 1, file);
+    fwrite(&header->x_ppm, sizeof(int), 1, file);
+    fwrite(&header->y_ppm, sizeof(int), 1, file);
+    fwrite(&header->colors_in_table, sizeof(int), 1, file);
+    fwrite(&header->important_color_count, sizeof(int), 1, file);
 }
 
 void makeDIBHeader(struct DIB_Header* header, int width, int height) {
