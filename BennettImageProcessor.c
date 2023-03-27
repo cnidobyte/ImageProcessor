@@ -73,6 +73,8 @@ int main(int argc, char **argv) {
             default :
                 break;
         }
+
+        //TODO: Need to add stuff for invalid arguments.
     }
     if(outfile == NULL) {
         //TODO: Play around with string so that file.bmp becomes file_copy.bmp
@@ -106,6 +108,8 @@ int main(int argc, char **argv) {
     if(sizeFlag == 1) {
         image_apply_resize(img, factor);
     }
+
+    //TODO: write files for export
 
     printf("Hello, World!\n");
     image_destroy(&img);
