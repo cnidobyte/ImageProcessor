@@ -44,11 +44,28 @@ void writeDIBHeader(FILE* file, struct DIB_Header* header) {
 }
 
 void makeDIBHeader(struct DIB_Header* header, int width, int height) {
-
+    int paddingRequired = 4- ((width * 3) % 4);
+    header->DIB_Header_Size = 40;
+    header->image_width = width;
+    header->image_height = height;
+    header->planes = 1;
+    header->bits_per_pixel = 24;
+    header->compression = 0;
+    header->image_size = ((width * 3) + paddingRequired * 4);
+    header->x_ppm = 0;
+    header->y_ppm = 0;
+    header->colors_in_table = 0;
+    header->important_color_count = 0;
 }
 
 void makeBMPHeader(struct BMP_Header* header, int width, int height) {
-
+    int paddingRequired = 4 - ((width * 3) % 4);
+    header->signature[0] = 'B';
+    header->signature[1] = 'M';
+    header->size = 54 + ((width * 3) + paddingRequired) * height;
+    header->reserved1 = 0;
+    header->reserved2 = 0;
+    header->offset_pixel_array = 54;
 }
 
 void readPixelsBMP(FILE* file, struct Pixel** pArr, int width, int height) {

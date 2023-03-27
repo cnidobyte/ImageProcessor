@@ -26,8 +26,8 @@ int main(int argc, char **argv) {
 
     FILE* infile;
     FILE* outfile;
-    struct BMP_Header bmpHeader;
-    struct DIB_Header dibHeader;
+    struct BMP_Header bmpHeader, bmpHeaderOut;
+    struct DIB_Header dibHeader, dibHeaderOut;
     struct Pixel** pixel;
 
 
@@ -94,6 +94,7 @@ int main(int argc, char **argv) {
         pixel[i] = malloc(sizeof(struct Pixel) * dibHeader.image_height);
     }
     readPixelsBMP(infile, pixel, dibHeader.image_width, dibHeader.image_height);
+    fclose(infile);
 
     //Create Image
     Image* img = image_create(pixel, dibHeader.image_width, dibHeader.image_height);
@@ -108,12 +109,18 @@ int main(int argc, char **argv) {
     if(sizeFlag == 1) {
         image_apply_resize(img, factor);
     }
-
-    //TODO: write files for export
+    //Make headers
+    makeBMPHeader(&bmpHeaderOut, image_get_width(img), image_get_height(img));
+    makeDIBHeader(&dibHeaderOut, image_get_width(img), image_get_height(img));
+    //Write files for export
+    writeBMPHeader(outfile, &bmpHeaderOut);
+    writeDIBHeader(outfile, &dibHeaderOut);
+    writePixelsBMP(outfile, pixel, image_get_width(img), image_get_height(img));
 
     printf("Hello, World!\n");
     image_destroy(&img);
-    fclose(infile);
+
+    fclose(outfile);
     return 0;
 }
 
