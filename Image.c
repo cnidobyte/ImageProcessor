@@ -7,6 +7,7 @@
  *
  */
 #include "Image.h"
+#include <math.h>
 
 Image* image_create(struct Pixel** pArr, int width, int height) {
     Image* img = (Image*) malloc(sizeof(Image));
@@ -37,9 +38,12 @@ void image_apply_bw(Image* img) {
     int row, col;
     for(row = image_get_height(img) - 1; row >= 0; row--) {
         for(col = 0; col < image_get_width(img); col++) {
-           img->pArr[row][col].b *= 0.114;
-           img->pArr[row][col].g *= 0.587;
-           img->pArr[row][col].r *= 0.299;
+            int grey = (int) round((img->pArr[row][col].b * 0.114) + (img->pArr[row][col].g * 0.587)
+                    + (img->pArr[row][col].r * 0.299));
+
+            img->pArr[row][col].b = grey;
+            img->pArr[row][col].g = grey;
+            img->pArr[row][col].r = grey;
         }
     }
 }

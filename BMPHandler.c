@@ -99,5 +99,17 @@ void readPixelsBMP(FILE* file, struct Pixel** pArr, int width, int height) {
 }
 
 void writePixelsBMP(FILE* file, struct Pixel** pArr, int width, int height) {
-
+    int row, col;
+    int paddingRequired = 4 - ((width * 3) % 4);
+    for(row = height - 1; row >= 0; row--) {
+        for(col = 0; col < width; col++) {
+            fwrite(&pArr[col][row].b, sizeof(char), 1, file);
+            fwrite(&pArr[col][row].g, sizeof(char), 1, file);
+            fwrite(&pArr[col][row].r, sizeof(char), 1, file);
+//            printf("r: %d, g: %d, b: %d\n", pArr[col][row].r, pArr[col][row].g, pArr[col][row].b);
+        }
+        if(paddingRequired != 0) {
+            fseek(file, sizeof(unsigned char) * paddingRequired, SEEK_CUR);
+        }
+    }
 }
