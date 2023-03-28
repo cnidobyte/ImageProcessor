@@ -84,7 +84,7 @@ void makeBMPHeader(struct BMP_Header* header, int width, int height) {
 
 void readPixelsBMP(FILE* file, struct Pixel** pArr, int width, int height) {
     int row, col;
-    int paddingRequired = 4 - ((width * 3) % 4);
+    int paddingRequired = ((width * 3) % 4 != 0) ? 4 - ((width * 3) % 4) : 0;
     for(row = height - 1; row >= 0; row--) {
         for(col = 0; col < width; col++) {
             fread(&pArr[col][row].b, sizeof(char), 1, file);
@@ -100,7 +100,7 @@ void readPixelsBMP(FILE* file, struct Pixel** pArr, int width, int height) {
 
 void writePixelsBMP(FILE* file, struct Pixel** pArr, int width, int height) {
     int row, col;
-    int paddingRequired = 4 - ((width * 3) % 4);
+    int paddingRequired = ((width * 3) % 4 != 0) ? 4 - ((width * 3) % 4) : 0;
     for(row = height - 1; row >= 0; row--) {
         for(col = 0; col < width; col++) {
             fwrite(&pArr[col][row].b, sizeof(char), 1, file);

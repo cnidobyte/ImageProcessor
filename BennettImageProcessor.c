@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include "Image.h"
 #include "BMPHandler.h"
+#include <string.h>
 
 // Forward Declarations
 void testPrintBMP(struct BMP_Header header);
@@ -22,7 +23,7 @@ int main(int argc, char **argv) {
     int gShift = 0;
     int bShift = 0;
     float factor = 1;
-    int thing;
+    int option;
 
     FILE* infile;
     FILE* outfile;
@@ -32,52 +33,67 @@ int main(int argc, char **argv) {
 
 
     if(argc < 2) {
-        printf("Please include an image to be processed. Usage: ImageProcessor <file.bmp> <args>");
+        fprintf(stderr, "Please include an image to be processed. Usage: ImageProcessor <file.bmp> <args>");
+        exit(1);
     }
 
     infile = fopen(argv[1], "rb");
-    while ((thing = getopt(argc, argv, "r:g:b:wo:s:")) != -1) {
-        switch (thing) {
+    while ((option = getopt(argc, argv, "r:g:b:wo:s:")) != -1) {
+        switch (option) {
             // Stores shift values for later use, marks flag that shift operation should be performed.
             case 'r':
                 rShift = atoi(optarg);
+                if(rShift == 0) {
+                    fprintf(stderr, "Not a valid input for this argument. Enter any non-zero number.");
+                    exit(2);
+                }
                 shiftFlag = 1;
-                printf("r reaches here, %d\n", rShift);
                 break;
             case 'g':
                 gShift = atoi(optarg);
+                if(gShift == 0) {
+                    fprintf(stderr, "Not a valid input for this argument. Enter any non-zero number.");
+                    exit(2);
+                }
                 shiftFlag = 1;
-                printf("g reaches here, %d\n", gShift);
                 break;
             case 'b':
                 bShift = atoi(optarg);
+                if(bShift == 0) {
+                    fprintf(stderr, "Not a valid input for this argument. Enter any non-zero number.");
+                    exit(2);
+                }
                 shiftFlag = 1;
-                printf("b reaches here, %d\n", bShift);
                 break;
             //Marks bwflag
             case 'w':
-                printf("w reaches here.\n");
                 bwFlag = 1;
                 break;
             //Stores name of outfile for later use.
             case 'o' :
-                printf("o reaches here");
                 outfile = fopen(optarg, "wb");
                 break;
             //Stores resize factor.
             case 's' :
-                printf("s reaches here");
-                factor = atoi(optarg);
+                factor = atof(optarg);
+                if(factor == 0) {
+                    fprintf(stderr, "Not a valid input for this argument. Enter any non-zero number.");
+                    exit(3);
+                }
                 sizeFlag = 1;
                 break;
+            case '?':
+                printf("Unknown option: %c\n", optopt);
+                exit(4);
             default :
                 break;
         }
-
-        //TODO: Need to add stuff for invalid arguments.
     }
     if(outfile == NULL) {
         //TODO: Play around with string so that file.bmp becomes file_copy.bmp
+        char* fileName = strtok(argv[1], " ");
+        strcat(fileName, "_copy.bmp");
+        outfile = fopen(fileName, "wb");
     }
 
     // Read BMP and DIB headers.
@@ -115,7 +131,7 @@ int main(int argc, char **argv) {
     //Write files for export
     writeBMPHeader(outfile, &bmpHeaderOut);
     writeDIBHeader(outfile, &dibHeaderOut);
-    writePixelsBMP(outfile, pixel, image_get_width(img), image_get_height(img));
+    writePixelsBMP(outfile, image_get_pixels(img), image_get_width(img), image_get_height(img));
 
     printf("Hello, World!\n");
     image_destroy(&img);

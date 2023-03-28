@@ -64,5 +64,29 @@ void image_apply_colorshift(Image* img, int rShift, int gShift, int bShift) {
 }
 
 void image_apply_resize(Image* img, float factor) {
+    //create new pixel array
+    struct Pixel** new_pixel;
+    int width = (int) (image_get_width(img) * factor);
+    int height = (int) (image_get_height(img) * factor);
+    new_pixel = (struct Pixel **) malloc(sizeof(struct Pixel*) * width);
+    int i;
+    for(i = 0; i < width; i++) {
+        new_pixel[i] = malloc(sizeof(struct Pixel) * height);
+    }
+
+    //Populate new array
+    int row, col;
+    for(row = height - 1; row >= 0; row--) {
+        for(col = 0; col < width; col++) {
+            new_pixel[row][col].b = img->pArr[(int)(row/factor)][(int)(col/factor)].b;
+            new_pixel[row][col].g = img->pArr[(int)(row/factor)][(int)(col/factor)].g;
+            new_pixel[row][col].r = img->pArr[(int)(row/factor)][(int)(col/factor)].r;
+//            printf("r: %d, g: %d, b: %d\n", pArr[col][row].r, pArr[col][row].g, pArr[col][row].b);
+        }
+    }
+    // Change img pointer to new image
+    img->pArr = new_pixel;
+    img->width = width;
+    img->height = height;
 
 }
