@@ -52,9 +52,15 @@ void image_apply_colorshift(Image* img, int rShift, int gShift, int bShift) {
     int row, col;
     for(row = image_get_height(img) - 1; row >= 0; row--) {
         for(col = 0; col < image_get_width(img); col++) {
-            int newB = (img->pArr[row][col].b + bShift < 255) ? img->pArr[row][col].b + bShift : 255;
-            int newG = (img->pArr[row][col].g + gShift < 255) ? img->pArr[row][col].g + gShift : 255;
-            int newR = (img->pArr[row][col].r + rShift < 255) ? img->pArr[row][col].r + rShift : 255;
+            int newB =  (img->pArr[row][col].b + bShift > 255) ? 255 :
+                        (img->pArr[row][col].b + bShift < 0) ?  0 :
+                        img->pArr[row][col].b + bShift;
+            int newG =  (img->pArr[row][col].g + gShift > 255) ? 255 :
+                        (img->pArr[row][col].g + gShift < 0) ?  0 :
+                        img->pArr[row][col].g + gShift;
+            int newR =  (img->pArr[row][col].r + rShift > 255) ? 255 :
+                        (img->pArr[row][col].r + rShift < 0) ?  0 :
+                        img->pArr[row][col].r + rShift;
 
             img->pArr[row][col].b = newB;
             img->pArr[row][col].g = newG;
