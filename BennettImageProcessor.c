@@ -1,8 +1,10 @@
 /**
- * Description:
- * Time to Complete:
+ * Description: Processes bitmap files. Takes a bitmap image and can convert it to greyscale, and apply color filters
+ * Can resize images.
+ * Time to Complete: 16 hours
  *
- * @author Shota Bennett,
+ * @author Shota Bennett
+ * @version 3/27/2023
  */
 
 #include <stdio.h>

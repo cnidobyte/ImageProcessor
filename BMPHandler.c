@@ -1,6 +1,6 @@
 /**
- * Description:
- * Time to Complete: 6:28pm-6:36pm, 10am-
+ * Description: Handles bitmap file operations. Reads and writes bitmap files.
+ * Time to Complete: 3 hours.
  *
  * @author Shota Bennett
  * @version 3/25/2023

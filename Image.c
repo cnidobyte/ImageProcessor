@@ -1,6 +1,6 @@
 /**
- * Description:
- * Completion time: 6:15pm, 6:28pm
+ * Description: Implementation code for Image.h. Implements image creation and destruction as well as filters.
+ * Completion time: 4 hours
  *
  * @author Shota Bennett
  * @version 3/25/2023

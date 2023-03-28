@@ -1,10 +1,10 @@
 ﻿/**
 * Specification for an image ADT.
 *
-* Completion time: ?
+* Completion time: 10 minutes.
 *
 * @author Shota Bennett, Ruben Acuna
-* @version 9/9/2021
+* @version 3/27/2023
 */
 
 #ifndef PixelProcessor_H
